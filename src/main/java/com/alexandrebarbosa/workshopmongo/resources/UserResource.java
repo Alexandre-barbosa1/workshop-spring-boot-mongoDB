@@ -29,17 +29,24 @@ public class UserResource {
         return ResponseEntity.ok().body(listDto);
     }
 
-    @RequestMapping (value = "/{id}", method = GET)
+    @RequestMapping(value = "/{id}", method = GET)
     public ResponseEntity<UserDTO> findById(@PathVariable String id) {
         User obj = service.findById(id);
         return ResponseEntity.ok().body(new UserDTO(obj));
     }
+
     @PostMapping
-    public ResponseEntity<Void> insert ( @RequestBody UserDTO objDto){
+    public ResponseEntity<Void> insert(@RequestBody UserDTO objDto) {
         User obj = service.fromDTO(objDto);
-         obj = service.insert(obj);
-         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
-         return ResponseEntity.created(uri).build();
+        obj = service.insert(obj);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
+    @RequestMapping(value = "/{id}", method = DELETE)
+    public ResponseEntity<Void> deleteById(@PathVariable String id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+
+    }
 }
