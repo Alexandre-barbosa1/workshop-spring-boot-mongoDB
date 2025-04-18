@@ -1,5 +1,6 @@
 package com.alexandrebarbosa.workshopmongo.resources;
 
+import com.alexandrebarbosa.workshopmongo.domain.Post;
 import com.alexandrebarbosa.workshopmongo.domain.User;
 import com.alexandrebarbosa.workshopmongo.dto.UserDTO;
 import com.alexandrebarbosa.workshopmongo.services.UserServices;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
-@RequestMapping(value="/users")
+@RequestMapping(value = "/users")
 public class UserResource {
 
     @Autowired
@@ -56,5 +57,11 @@ public class UserResource {
         obj.setId(id);
         obj = service.update(obj);
         return ResponseEntity.noContent().build();
+    }
+
+    @RequestMapping(value = "/{id}/posts", method = GET)
+    public ResponseEntity<List<Post>> findPosts(@PathVariable String id) {
+        User obj = service.findById(id);
+        return ResponseEntity.ok().body(obj.getPosts());
     }
 }
